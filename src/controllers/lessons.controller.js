@@ -37,7 +37,7 @@ class LessonController {
     async getAll(_, res, next) {
         try {
             const data = await pg.query(
-                "SELECT lessons.title, lessons.content, courses.title, courses.description FROM lessons INNER JOIN courses ON courses.id = lessons.course_id"
+                "SELECT lessons.title, lessons.content, courses.title, courses.description, users.name, users.id FROM lessons INNER JOIN courses ON courses.id = lessons.course_id INNER JOIN users ON users.id = courses.teacher_id"
             );
             return successRes(res, data.rows);
         } catch (error) {
@@ -50,7 +50,7 @@ class LessonController {
             const id = req?.params?.id;
 
             const data = await pg.query(
-                "SELECT lessons.title, lessons.content, courses.title, courses.description FROM lessons INNER JOIN courses ON lessons.course_id = courses.id WHERE lessons.id = $1",
+                "SELECT lessons.title, lessons.content, courses.title, courses.description, users.name, users.id FROM lessons INNER JOIN courses ON courses.id = lessons.course_id INNER JOIN users ON users.id = courses.teacher_id WHERE lessons.id = $1",
                 [id]
             );
 

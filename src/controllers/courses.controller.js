@@ -36,7 +36,7 @@ class CourseController {
     async getAll(_, res, next) {
         try {
             const data = await pg.query(
-                "SELECT courses.title, courses.description, users.name, users.email, users.role FROM courses INNER JOIN users ON users.id = courses.teacher_id"
+                "SELECT courses.title, courses.description, users.name, users.email, users.role, lessons.title, lessons.content FROM courses INNER JOIN users ON users.id = courses.teacher_id INNER JOIN lessons ON lessons.course_id = courses.id"
             );
             return successRes(res, data.rows);
         } catch (error) {
@@ -49,7 +49,7 @@ class CourseController {
             const id = req?.params?.id;
 
             const data = await pg.query(
-                "SELECT courses.title, courses.description, users.name, users.email, users.role FROM courses INNER JOIN users ON users.id = courses.teacher_id WHERE courses.id = $1",
+                "SELECT courses.title, courses.description, users.name, users.email, users.role, lessons.title, lessons.content FROM courses INNER JOIN users ON users.id = courses.teacher_id INNER JOIN lessons ON lessons.course_id = courses.id WHERE courses.id = $1",
                 [id]
             );
 
